@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>แอดมิน | แจ้งทำข่าวประชาสัมพันธ์</title>
+  <meta name="description" content="หน้าแอดมินระบบแจ้งทำข่าวประชาสัมพันธ์ กลุ่มสาระการเรียนรู้สังคมศึกษาฯ โรงเรียนเทพศิรินทร์ นนทบุรี">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="admin">
+  <header class="site-header">
+    <div class="container header-grid">
+      <a class="brand" href="index.html" aria-label="หน้าแรก">
+        <span class="brand-mark" aria-hidden="true">สศ</span>
+        <span class="brand-text">
+          <strong>ระบบแอดมินข่าวประชาสัมพันธ์</strong>
+          <span>กลุ่มสาระการเรียนรู้สังคมศึกษาฯ โรงเรียนเทพศิรินทร์ นนทบุรี</span>
+        </span>
+      </a>
+      <a class="nav-link" href="index.html">
+        <i data-lucide="home" aria-hidden="true"></i>
+        <span>หน้าแจ้งข่าว</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="container admin-main">
+    <section id="loginView" class="login-panel" aria-labelledby="loginTitle">
+      <div class="section-heading centered">
+        <p class="eyebrow">Admin</p>
+        <h1 id="loginTitle">เข้าสู่ระบบแอดมิน</h1>
+      </div>
+
+      <form id="loginForm" class="login-form" novalidate>
+        <div class="field">
+          <label for="adminPassword">รหัสผ่าน</label>
+          <input id="adminPassword" name="password" type="password" autocomplete="current-password" required placeholder="กรอกรหัสผ่านแอดมิน">
+        </div>
+        <div id="loginAlert" class="alert compact" role="status" aria-live="polite" hidden></div>
+        <button id="loginButton" class="primary-button" type="submit">
+          <i data-lucide="log-in" aria-hidden="true"></i>
+          <span>เข้าสู่ระบบ</span>
+        </button>
+      </form>
+    </section>
+
+    <section id="adminView" class="admin-workspace" hidden>
+      <div class="section-toolbar admin-toolbar">
+        <div>
+          <p class="eyebrow">News Queue</p>
+          <h1>จัดการรายการข่าว</h1>
+        </div>
+        <div class="toolbar-actions">
+          <button id="refreshNews" class="secondary-button" type="button">
+            <i data-lucide="refresh-cw" aria-hidden="true"></i>
+            <span>รีเฟรช</span>
+          </button>
+          <button id="logoutButton" class="ghost-button" type="button">
+            <i data-lucide="log-out" aria-hidden="true"></i>
+            <span>ออกจากระบบ</span>
+          </button>
+        </div>
+      </div>
+
+      <div id="adminAlert" class="alert compact" role="status" aria-live="polite" hidden></div>
+
+      <div class="admin-grid">
+        <aside class="queue-panel" aria-labelledby="queueTitle">
+          <div class="queue-controls">
+            <h2 id="queueTitle">รายการข่าวทั้งหมด</h2>
+            <div class="field slim">
+              <label for="newsSearch">ค้นหา</label>
+              <input id="newsSearch" type="search" placeholder="ชื่อผู้แจ้ง หัวข้อ หรือเนื้อหา">
+            </div>
+            <div class="field slim">
+              <label for="statusFilter">สถานะ</label>
+              <select id="statusFilter">
+                <option value="all">ทั้งหมด</option>
+                <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
+                <option value="เสร็จสิ้น">เสร็จสิ้น</option>
+              </select>
+            </div>
+          </div>
+          <div id="newsList" class="news-list" aria-live="polite"></div>
+        </aside>
+
+        <section class="detail-panel" aria-labelledby="detailTitle">
+          <div id="emptyDetail" class="empty-state">
+            <i data-lucide="newspaper" aria-hidden="true"></i>
+            <strong>เลือกรายการข่าว</strong>
+            <span>รายละเอียดและเครื่องมือจัดการจะแสดงในส่วนนี้</span>
+          </div>
+
+          <div id="detailContent" hidden>
+            <div class="detail-header">
+              <div>
+                <p class="eyebrow">News Detail</p>
+                <h2 id="detailTitle">รายละเอียดข่าว</h2>
+              </div>
+              <span id="detailStatusBadge" class="status-badge">กำลังดำเนินการ</span>
+            </div>
+
+            <dl class="detail-meta">
+              <div>
+                <dt>รหัสข่าว</dt>
+                <dd id="detailId">-</dd>
+              </div>
+              <div>
+                <dt>วันที่แจ้ง</dt>
+                <dd id="detailCreatedAt">-</dd>
+              </div>
+              <div>
+                <dt>จำนวนรูปต้นฉบับ</dt>
+                <dd id="detailImageCount">-</dd>
+              </div>
+            </dl>
+
+            <form id="detailForm" class="detail-form" novalidate>
+              <input id="detailNewsId" type="hidden">
+
+              <div class="field">
+                <label for="detailReporter">ชื่อผู้แจ้ง</label>
+                <input id="detailReporter" type="text" required>
+              </div>
+
+              <div class="field">
+                <label for="detailNewsTitle">หัวข้อข่าว</label>
+                <input id="detailNewsTitle" type="text" required maxlength="180">
+              </div>
+
+              <div class="field">
+                <label for="detailNewsContent">เนื้อหาข่าว</label>
+                <textarea id="detailNewsContent" rows="8" required></textarea>
+              </div>
+
+              <div class="field">
+                <label for="detailStatus">สถานะข่าว</label>
+                <select id="detailStatus">
+                  <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
+                  <option value="เสร็จสิ้น">เสร็จสิ้น</option>
+                </select>
+              </div>
+
+              <div class="detail-actions">
+                <a id="openFolderLink" class="secondary-button as-link" href="#" target="_blank" rel="noopener">
+                  <i data-lucide="folder-open" aria-hidden="true"></i>
+                  <span>เปิดโฟลเดอร์รูปต้นฉบับ</span>
+                </a>
+                <button id="saveDetail" class="primary-button" type="submit">
+                  <i data-lucide="save" aria-hidden="true"></i>
+                  <span>บันทึกการแก้ไข</span>
+                </button>
+              </div>
+            </form>
+
+            <div class="completed-upload">
+              <div class="upload-header">
+                <div>
+                  <p class="eyebrow">Final Artwork</p>
+                  <h3>แผ่นข่าวที่เสร็จสมบูรณ์</h3>
+                </div>
+              </div>
+              <div id="completedPreview" class="completed-preview"></div>
+              <div class="field">
+                <label for="completedFile">อัปโหลดไฟล์ jpg, png, webp หรือ pdf</label>
+                <input id="completedFile" type="file" accept=".jpg,.jpeg,.png,.webp,.pdf,image/jpeg,image/png,image/webp,application/pdf">
+              </div>
+              <button id="uploadCompleted" class="secondary-button" type="button">
+                <i data-lucide="upload-cloud" aria-hidden="true"></i>
+                <span>อัปโหลดแผ่นข่าว</span>
+              </button>
+            </div>
+
+            <div class="danger-zone">
+              <button id="deleteNews" class="danger-button" type="button">
+                <i data-lucide="trash-2" aria-hidden="true"></i>
+                <span>ลบข่าว</span>
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

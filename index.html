@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>แจ้งทำข่าวประชาสัมพันธ์ กลุ่มสาระการเรียนรู้สังคมศึกษาฯ โรงเรียนเทพศิรินทร์ นนทบุรี</title>
+  <meta name="description" content="ระบบแจ้งทำข่าวประชาสัมพันธ์ กลุ่มสาระการเรียนรู้สังคมศึกษาฯ โรงเรียนเทพศิรินทร์ นนทบุรี">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="index">
+  <header class="site-header">
+    <div class="container header-grid">
+      <a class="brand" href="index.html" aria-label="หน้าแรก">
+        <span class="brand-mark" aria-hidden="true">สศ</span>
+        <span class="brand-text">
+          <strong>แจ้งทำข่าวประชาสัมพันธ์</strong>
+          <span>กลุ่มสาระการเรียนรู้สังคมศึกษาฯ โรงเรียนเทพศิรินทร์ นนทบุรี</span>
+        </span>
+      </a>
+      <a class="nav-link" href="admin.html">
+        <i data-lucide="shield-check" aria-hidden="true"></i>
+        <span>แอดมิน</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="container page-grid">
+    <section class="submission-surface" aria-labelledby="formTitle">
+      <div class="section-heading">
+        <p class="eyebrow">Social Studies Newsroom</p>
+        <h1 id="formTitle">แจ้งทำข่าวประชาสัมพันธ์ กลุ่มสาระการเรียนรู้สังคมศึกษาฯ โรงเรียนเทพศิรินทร์ นนทบุรี</h1>
+      </div>
+
+      <form id="newsForm" class="news-form" novalidate>
+        <div class="field">
+          <label for="reporterName">ชื่อ-สกุล</label>
+          <input id="reporterName" name="reporterName" type="text" autocomplete="name" required placeholder="เช่น นายกฤษณ์ สังคมดี">
+        </div>
+
+        <div class="field">
+          <label for="newsTitle">หัวข้อข่าว</label>
+          <input id="newsTitle" name="title" type="text" required maxlength="180" placeholder="ระบุหัวข้อข่าวที่ต้องการประชาสัมพันธ์">
+        </div>
+
+        <div class="field">
+          <label for="newsContent">เนื้อหาข่าว</label>
+          <textarea id="newsContent" name="content" rows="8" required placeholder="กรอกรายละเอียดกิจกรรม วัน เวลา สถานที่ ผู้เกี่ยวข้อง และข้อมูลสำคัญ"></textarea>
+        </div>
+
+        <div class="field">
+          <label for="newsImages">รูปภาพประกอบข่าว</label>
+          <div class="upload-box">
+            <input id="newsImages" name="images" type="file" accept="image/*" multiple>
+            <div class="upload-copy" aria-hidden="true">
+              <i data-lucide="images"></i>
+              <strong>เลือกรูปภาพสูงสุด 10 รูป</strong>
+              <span>รองรับไฟล์รูปภาพจากโทรศัพท์หรือคอมพิวเตอร์</span>
+            </div>
+          </div>
+          <div class="upload-meta">
+            <span id="imageCount">ยังไม่ได้เลือกรูป</span>
+            <button class="text-button" id="clearImages" type="button">ล้างรูป</button>
+          </div>
+          <div id="imagePreview" class="preview-grid" aria-live="polite"></div>
+        </div>
+
+        <div id="formAlert" class="alert" role="status" aria-live="polite" hidden></div>
+
+        <button id="submitButton" class="primary-button" type="submit">
+          <i data-lucide="send" aria-hidden="true"></i>
+          <span>ส่งข้อมูล</span>
+        </button>
+      </form>
+    </section>
+
+    <section class="completed-section" aria-labelledby="completedTitle">
+      <div class="section-toolbar">
+        <div>
+          <p class="eyebrow">Completed PR</p>
+          <h2 id="completedTitle">ข่าวประชาสัมพันธ์ที่เสร็จสมบูรณ์</h2>
+        </div>
+        <button id="refreshCompleted" class="icon-button" type="button" aria-label="รีเฟรชรายการข่าว">
+          <i data-lucide="refresh-cw" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <div id="completedAlert" class="alert compact" role="status" aria-live="polite" hidden></div>
+      <div id="completedList" class="completed-grid" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>โรงเรียนเทพศิรินทร์ นนทบุรี</span>
+      <span>ระบบแจ้งทำข่าวประชาสัมพันธ์</span>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
