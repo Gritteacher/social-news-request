@@ -80,6 +80,9 @@ function doGet(e) {
       case "listCompleted":
         payload = handleListCompleted_();
         break;
+      case "listStatus":
+        payload = handleListStatus_();
+        break;
       case "getByClientRequestId":
         payload = handleGetByClientRequestId_(params);
         break;
@@ -171,6 +174,20 @@ function handleListCompleted_() {
     })
     .sort(sortNewestFirst_)
     .map(publicItem_);
+
+  return {
+    ok: true,
+    items: items
+  };
+}
+
+function handleListStatus_() {
+  const items = readAllItems_()
+    .filter(function(item) {
+      return !item.deleted;
+    })
+    .sort(sortNewestFirst_)
+    .map(publicStatusItem_);
 
   return {
     ok: true,
@@ -600,6 +617,19 @@ function publicProgressItem_(item) {
     updatedAt: item.updatedAt,
     title: item.title,
     status: item.status
+  };
+}
+
+function publicStatusItem_(item) {
+  return {
+    id: item.id,
+    createdAt: item.createdAt,
+    updatedAt: item.updatedAt,
+    reporterName: item.reporterName,
+    title: item.title,
+    status: item.status,
+    originalImageCount: item.originalImageCount,
+    completedUploadedAt: item.completedUploadedAt
   };
 }
 

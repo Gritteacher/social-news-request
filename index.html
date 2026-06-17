@@ -81,6 +81,21 @@
       </form>
     </section>
 
+    <section class="status-section" aria-labelledby="statusTitle">
+      <div class="section-toolbar">
+        <div>
+          <p class="eyebrow">News Tracking</p>
+          <h2 id="statusTitle">ติดตามสถานะข่าวที่แจ้ง</h2>
+        </div>
+        <button id="refreshStatus" class="icon-button" type="button" aria-label="รีเฟรชสถานะข่าว">
+          <i data-lucide="rotate-cw" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <div id="statusAlert" class="alert compact" role="status" aria-live="polite" hidden></div>
+      <div id="statusList" class="status-list" aria-live="polite"></div>
+    </section>
+
     <section class="completed-section" aria-labelledby="completedTitle">
       <div class="section-toolbar">
         <div>
@@ -100,7 +115,7 @@
   <footer class="site-footer">
     <div class="container footer-inner">
       <span>โรงเรียนเทพศิรินทร์ นนทบุรี</span>
-      <span>ระบบแจ้งทำข่าวประชาสัมพันธ์</span>
+      <span>พัฒนาโดย นายกฤษณพล ทองอุ่น</span>
     </div>
   </footer>
 

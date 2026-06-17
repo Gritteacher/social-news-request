@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
   cacheElements();
   bindEvents();
   renderImagePreview();
+  loadNewsStatus();
   loadCompletedNews();
 
   if (window.lucide) {
@@ -37,6 +38,9 @@ function cacheElements() {
   elements.completedList = document.getElementById("completedList");
   elements.completedAlert = document.getElementById("completedAlert");
   elements.refreshCompleted = document.getElementById("refreshCompleted");
+  elements.statusList = document.getElementById("statusList");
+  elements.statusAlert = document.getElementById("statusAlert");
+  elements.refreshStatus = document.getElementById("refreshStatus");
   elements.globalLoading = document.getElementById("globalLoading");
 }
 
@@ -45,6 +49,7 @@ function bindEvents() {
   elements.clearImages.addEventListener("click", clearImages);
   elements.form.addEventListener("submit", handleSubmit);
   elements.refreshCompleted.addEventListener("click", loadCompletedNews);
+  elements.refreshStatus.addEventListener("click", loadNewsStatus);
 }
 
 function isConfigured() {
@@ -179,6 +184,7 @@ async function handleSubmit(event) {
     elements.form.reset();
     clearImages();
     showNotice(elements.formAlert, "ส่งข้อมูลเรียบร้อยแล้ว แอดมินได้รับรายการข่าวนี้แล้ว", "success");
+    await loadNewsStatus();
     await loadCompletedNews();
   } catch (error) {
     console.error(error);
@@ -198,6 +204,109 @@ function setFormBusy(isBusy) {
   elements.newsImages.disabled = isBusy;
   elements.clearImages.disabled = isBusy;
   elements.submitButton.querySelector("span").textContent = isBusy ? "กำลังส่ง..." : "ส่งข้อมูล";
+}
+
+async function loadNewsStatus() {
+  if (!isConfigured()) {
+    renderEmptyStatus("ยังไม่ได้ตั้งค่า GOOGLE_SCRIPT_URL");
+    showNotice(elements.statusAlert, "ตั้งค่า GOOGLE_SCRIPT_URL ในไฟล์ script.js หลัง deploy Apps Script", "warning");
+    return;
+  }
+
+  showGlobalLoading();
+  hideNotice(elements.statusAlert);
+  elements.statusList.replaceChildren(renderLoadingState("กำลังโหลดสถานะข่าว..."));
+
+  try {
+    const response = await gasGet("listStatus");
+    if (!response.ok) {
+      throw new Error(response.error || "Cannot load news status");
+    }
+
+    renderNewsStatus(response.items || []);
+  } catch (error) {
+    if (error.message === "UNKNOWN_ACTION") {
+      renderEmptyStatus("รออัปเดต Apps Script เพื่อเปิดใช้การติดตามสถานะข่าว");
+      showNotice(elements.statusAlert, "กรุณานำ Code.gs เวอร์ชันล่าสุดไป deploy ใน Apps Script เพื่อแสดงสถานะข่าวทั้งหมด", "warning");
+    } else {
+      console.error(error);
+      renderEmptyStatus("ยังโหลดสถานะข่าวไม่ได้");
+      showNotice(elements.statusAlert, "ไม่สามารถโหลดสถานะข่าวได้ กรุณาตรวจสอบการ deploy Apps Script", "error");
+    }
+  } finally {
+    hideGlobalLoading();
+  }
+}
+
+function renderNewsStatus(items) {
+  elements.statusList.replaceChildren();
+
+  if (!items.length) {
+    renderEmptyStatus("ยังไม่มีรายการแจ้งข่าว");
+    return;
+  }
+
+  items.forEach((item) => {
+    const card = document.createElement("article");
+    card.className = "status-card";
+
+    const badge = document.createElement("span");
+    badge.className = `status-badge${item.status === "เสร็จสิ้น" ? " done" : ""}`;
+    badge.textContent = item.status || "กำลังดำเนินการ";
+
+    const title = document.createElement("h3");
+    title.textContent = item.title || "ไม่มีหัวข้อข่าว";
+
+    const meta = document.createElement("div");
+    meta.className = "status-meta";
+
+    const reporter = document.createElement("span");
+    reporter.innerHTML = '<i data-lucide="user-round" aria-hidden="true"></i>';
+    reporter.append(document.createTextNode(item.reporterName || "-"));
+
+    const date = document.createElement("span");
+    date.innerHTML = '<i data-lucide="clock-3" aria-hidden="true"></i>';
+    date.append(document.createTextNode(formatDate(item.updatedAt || item.createdAt)));
+
+    const images = document.createElement("span");
+    images.innerHTML = '<i data-lucide="image" aria-hidden="true"></i>';
+    images.append(document.createTextNode(`${item.originalImageCount || 0} รูป`));
+
+    meta.append(reporter, date, images);
+
+    const progress = document.createElement("div");
+    progress.className = `status-progress${item.status === "เสร็จสิ้น" ? " done" : ""}`;
+    progress.innerHTML = "<span></span>";
+
+    const step = document.createElement("p");
+    step.className = "status-step";
+    step.textContent = item.status === "เสร็จสิ้น"
+      ? "แผ่นข่าวเสร็จสมบูรณ์แล้ว"
+      : "รับเรื่องแล้ว กำลังดำเนินการจัดทำข่าว";
+
+    card.append(badge, title, meta, progress, step);
+    elements.statusList.append(card);
+  });
+
+  if (window.lucide) {
+    window.lucide.createIcons();
+  }
+}
+
+function renderEmptyStatus(message) {
+  const empty = document.createElement("div");
+  empty.className = "empty-state";
+  empty.innerHTML = '<i data-lucide="list-checks" aria-hidden="true"></i>';
+
+  const title = document.createElement("strong");
+  title.textContent = message;
+
+  empty.append(title);
+  elements.statusList.replaceChildren(empty);
+
+  if (window.lucide) {
+    window.lucide.createIcons();
+  }
 }
 
 async function loadCompletedNews() {

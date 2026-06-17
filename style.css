@@ -319,13 +319,29 @@ iframe {
 
 .page-grid {
   display: grid;
+  grid-template-areas:
+    "form status"
+    "form completed";
   grid-template-columns: minmax(0, 1.04fr) minmax(340px, 0.76fr);
   gap: 24px;
   padding-block: 32px 56px;
   align-items: start;
 }
 
+.submission-surface {
+  grid-area: form;
+}
+
+.status-section {
+  grid-area: status;
+}
+
+.completed-section {
+  grid-area: completed;
+}
+
 .submission-surface,
+.status-section,
 .completed-section,
 .login-panel,
 .queue-panel,
@@ -342,6 +358,7 @@ iframe {
 }
 
 .submission-surface::before,
+.status-section::before,
 .completed-section::before,
 .login-panel::before,
 .queue-panel::before,
@@ -357,6 +374,7 @@ iframe {
 }
 
 .submission-surface > *,
+.status-section > *,
 .completed-section > *,
 .login-panel > *,
 .queue-panel > *,
@@ -366,6 +384,7 @@ iframe {
 }
 
 .submission-surface,
+.status-section,
 .completed-section,
 .login-panel,
 .detail-panel {
@@ -1149,6 +1168,80 @@ textarea {
   gap: 16px;
 }
 
+.status-list {
+  display: grid;
+  gap: 12px;
+}
+
+.status-card {
+  display: grid;
+  gap: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.74);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.72), rgba(240, 248, 235, 0.56)),
+    rgba(255, 255, 255, 0.66);
+  padding: 14px;
+  box-shadow: var(--shadow-soft);
+}
+
+.status-card h3 {
+  margin: 0;
+  color: #143528;
+  font-size: 1rem;
+  line-height: 1.42;
+  overflow-wrap: anywhere;
+}
+
+.status-meta {
+  display: grid;
+  gap: 7px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.status-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.status-meta svg {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  color: var(--primary);
+}
+
+.status-progress {
+  height: 9px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(21, 115, 72, 0.12);
+}
+
+.status-progress span {
+  display: block;
+  width: 54%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--gold), var(--primary));
+}
+
+.status-progress.done span {
+  width: 100%;
+}
+
+.status-step {
+  margin: 0;
+  color: var(--primary-dark);
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
 .news-card {
   border-color: rgba(255, 255, 255, 0.8);
 }
@@ -1189,7 +1282,14 @@ textarea {
 }
 
 @media (max-width: 940px) {
-  .page-grid,
+  .page-grid {
+    grid-template-areas:
+      "form"
+      "status"
+      "completed";
+    grid-template-columns: 1fr;
+  }
+
   .admin-grid {
     grid-template-columns: 1fr;
   }
@@ -1209,7 +1309,14 @@ textarea {
   }
 
   .header-grid {
-    min-height: 70px;
+    min-height: 74px;
+    gap: 10px;
+  }
+
+  .brand {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 7px 10px 7px 7px;
   }
 
   .brand-mark {
@@ -1219,6 +1326,8 @@ textarea {
   }
 
   .brand-text strong {
+    font-size: 1rem;
+    line-height: 1.32;
     white-space: normal;
   }
 
@@ -1239,14 +1348,15 @@ textarea {
 
   .page-grid,
   .admin-main {
-    padding-block: 22px 38px;
+    padding-block: 18px 30px;
   }
 
   .submission-surface,
+  .status-section,
   .completed-section,
   .login-panel,
   .detail-panel {
-    padding: 18px;
+    padding: 14px;
   }
 
   .section-toolbar,
@@ -1254,6 +1364,47 @@ textarea {
   .admin-toolbar {
     display: grid;
     gap: 12px;
+  }
+
+  .status-section .section-toolbar,
+  .completed-section .section-toolbar {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .status-section .section-toolbar h2,
+  .completed-section .section-toolbar h2 {
+    font-size: 1.28rem;
+    line-height: 1.35;
+  }
+
+  .status-section .icon-button,
+  .completed-section .icon-button {
+    flex: 0 0 44px;
+  }
+
+  .submission-surface .section-heading,
+  .login-panel .section-heading {
+    margin: -4px -4px 18px;
+    padding: 18px;
+  }
+
+  .submission-surface h1,
+  .login-panel h1 {
+    font-size: 1.56rem;
+  }
+
+  textarea {
+    min-height: 142px;
+  }
+
+  .upload-box {
+    min-height: 130px;
+  }
+
+  .empty-state {
+    padding: 28px 14px;
   }
 
   .admin-steps {
@@ -1285,7 +1436,8 @@ textarea {
   .footer-inner {
     display: grid;
     justify-items: center;
-    padding-block: 16px;
+    min-height: auto;
+    padding-block: 18px;
     text-align: center;
   }
 }
