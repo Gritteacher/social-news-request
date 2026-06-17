@@ -61,18 +61,18 @@ https://drive.google.com/drive/folders/1XyZFolderIdExample
 
 ```javascript
 const CONFIG = {
-  SHEET_ID: "PASTE_YOUR_SHEET_ID_HERE",
+  SHEET_ID: "1PFh--mYibtXQMawDiSWcbBVhn9U6ppZwtX-KMyiEmz0",
   SHEET_NAME: "News",
-  ROOT_FOLDER_ID: "PASTE_YOUR_ROOT_FOLDER_ID_HERE",
+  ROOT_FOLDER_ID: "1uOFQwByOplC-E3zyxgtHZrMO0TK7y-Hw",
   NOTIFY_EMAIL: "gritsn.th@gmail.com",
   ADMIN_TOKEN_SECONDS: 21600
 };
 ```
 
-ให้เปลี่ยน:
+ค่าที่ตั้งไว้ในชุดนี้:
 
-- `PASTE_YOUR_SHEET_ID_HERE` เป็น ID ของ Google Sheet
-- `PASTE_YOUR_ROOT_FOLDER_ID_HERE` เป็น ID ของ Drive folder หลัก
+- `1PFh--mYibtXQMawDiSWcbBVhn9U6ppZwtX-KMyiEmz0` เป็น ID ของ Google Sheet
+- `1uOFQwByOplC-E3zyxgtHZrMO0TK7y-Hw` เป็น ID ของ Drive folder หลัก
 - `NOTIFY_EMAIL` ตั้งไว้เป็น `gritsn.th@gmail.com` ตามเงื่อนไขแล้ว
 
 ## 4. ตั้งรหัสผ่านแอดมินแบบไม่ฝังในหน้าเว็บ
@@ -131,10 +131,10 @@ https://script.google.com/macros/s/AKfycbxxxxxxxxxxxxxxxxxxxxxxxx/exec
 
 ## 7. ตั้งค่า GOOGLE_SCRIPT_URL ในหน้าเว็บ
 
-เปิดไฟล์ `script.js` และ `admin.js` แล้วแก้บรรทัดนี้ให้เป็น Web app URL จากข้อ 6
+เปิดไฟล์ `script.js` และ `admin.js` แล้วตรวจสอบบรรทัดนี้ให้ตรงกับ Web app URL จากข้อ 6
 
 ```javascript
-const GOOGLE_SCRIPT_URL = "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzV_RkQ8-CXRrfnnu-dyt01LOtuqryB87CHHHMa3NOqQv3W4iH9eM0LcponI89G6Nc/exec";
 ```
 
 ตัวอย่าง:
@@ -209,20 +209,20 @@ Folder: /root
 ใน `script.js`:
 
 ```javascript
-const GOOGLE_SCRIPT_URL = "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzV_RkQ8-CXRrfnnu-dyt01LOtuqryB87CHHHMa3NOqQv3W4iH9eM0LcponI89G6Nc/exec";
 ```
 
 ใน `admin.js`:
 
 ```javascript
-const GOOGLE_SCRIPT_URL = "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzV_RkQ8-CXRrfnnu-dyt01LOtuqryB87CHHHMa3NOqQv3W4iH9eM0LcponI89G6Nc/exec";
 ```
 
 ใน `Code.gs`:
 
 ```javascript
-SHEET_ID: "PASTE_YOUR_SHEET_ID_HERE",
-ROOT_FOLDER_ID: "PASTE_YOUR_ROOT_FOLDER_ID_HERE",
+SHEET_ID: "1PFh--mYibtXQMawDiSWcbBVhn9U6ppZwtX-KMyiEmz0",
+ROOT_FOLDER_ID: "1uOFQwByOplC-E3zyxgtHZrMO0TK7y-Hw",
 ```
 
 ใน Apps Script `Script Properties`:

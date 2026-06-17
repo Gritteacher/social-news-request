@@ -11,10 +11,15 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body data-page="admin">
+  <div id="globalLoading" class="top-loader" aria-hidden="true">
+    <span></span>
+  </div>
   <header class="site-header">
     <div class="container header-grid">
       <a class="brand" href="index.html" aria-label="หน้าแรก">
-        <span class="brand-mark" aria-hidden="true">สศ</span>
+        <span class="brand-mark" aria-hidden="true">
+          <img src="https://www.tsn.ac.th/web/wp-content/uploads/2013/12/Logo_Blue-700x639.png" alt="">
+        </span>
         <span class="brand-text">
           <strong>ระบบแอดมินข่าวประชาสัมพันธ์</strong>
           <span>กลุ่มสาระการเรียนรู้สังคมศึกษาฯ โรงเรียนเทพศิรินทร์ นนทบุรี</span>
@@ -65,12 +70,24 @@
         </div>
       </div>
 
+      <div class="admin-steps" aria-label="ขั้นตอนการจัดการข่าว">
+        <div id="stepQueue" class="admin-step active">
+          <span>1</span>
+          <strong>เลือกรายการข่าว</strong>
+        </div>
+        <div id="stepDetail" class="admin-step">
+          <span>2</span>
+          <strong>ตรวจรายละเอียดและอัปโหลดแผ่นข่าว</strong>
+        </div>
+      </div>
+
       <div id="adminAlert" class="alert compact" role="status" aria-live="polite" hidden></div>
 
       <div class="admin-grid">
         <aside class="queue-panel" aria-labelledby="queueTitle">
           <div class="queue-controls">
-            <h2 id="queueTitle">รายการข่าวทั้งหมด</h2>
+            <p class="panel-kicker">ขั้นตอนที่ 1</p>
+            <h2 id="queueTitle">เลือกรายการข่าว</h2>
             <div class="field slim">
               <label for="newsSearch">ค้นหา</label>
               <input id="newsSearch" type="search" placeholder="ชื่อผู้แจ้ง หัวข้อ หรือเนื้อหา">
@@ -97,8 +114,8 @@
           <div id="detailContent" hidden>
             <div class="detail-header">
               <div>
-                <p class="eyebrow">News Detail</p>
-                <h2 id="detailTitle">รายละเอียดข่าว</h2>
+                <p class="panel-kicker">ขั้นตอนที่ 2</p>
+                <h2 id="detailTitle">ตรวจรายละเอียดข่าว</h2>
               </div>
               <span id="detailStatusBadge" class="status-badge">กำลังดำเนินการ</span>
             </div>

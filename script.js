@@ -6,7 +6,8 @@ const VERIFY_TIMEOUT_MS = 25000;
 const VERIFY_INTERVAL_MS = 1600;
 
 const state = {
-  selectedImages: []
+  selectedImages: [],
+  loadingCount: 0
 };
 
 const elements = {};
@@ -36,6 +37,7 @@ function cacheElements() {
   elements.completedList = document.getElementById("completedList");
   elements.completedAlert = document.getElementById("completedAlert");
   elements.refreshCompleted = document.getElementById("refreshCompleted");
+  elements.globalLoading = document.getElementById("globalLoading");
 }
 
 function bindEvents() {
@@ -150,6 +152,7 @@ async function handleSubmit(event) {
   }
 
   setFormBusy(true);
+  showGlobalLoading();
   showNotice(elements.formAlert, "กำลังเตรียมไฟล์และส่งข้อมูล...", "info");
 
   const clientRequestId = createId("request");
@@ -186,6 +189,7 @@ async function handleSubmit(event) {
     );
   } finally {
     setFormBusy(false);
+    hideGlobalLoading();
   }
 }
 
@@ -203,6 +207,7 @@ async function loadCompletedNews() {
     return;
   }
 
+  showGlobalLoading();
   hideNotice(elements.completedAlert);
   elements.completedList.replaceChildren(renderLoadingState("กำลังโหลดข่าวที่เสร็จสมบูรณ์..."));
 
@@ -217,6 +222,8 @@ async function loadCompletedNews() {
     console.error(error);
     renderEmptyCompleted("ยังโหลดรายการข่าวไม่ได้");
     showNotice(elements.completedAlert, "ไม่สามารถโหลดข่าวที่เสร็จสมบูรณ์ได้ กรุณาตรวจสอบการ deploy Apps Script", "error");
+  } finally {
+    hideGlobalLoading();
   }
 }
 
@@ -403,6 +410,20 @@ function showNotice(target, message, type = "success") {
 function hideNotice(target) {
   target.hidden = true;
   target.textContent = "";
+}
+
+function showGlobalLoading() {
+  state.loadingCount += 1;
+  if (elements.globalLoading) {
+    elements.globalLoading.classList.add("is-active");
+  }
+}
+
+function hideGlobalLoading() {
+  state.loadingCount = Math.max(0, state.loadingCount - 1);
+  if (state.loadingCount === 0 && elements.globalLoading) {
+    elements.globalLoading.classList.remove("is-active");
+  }
 }
 
 function compactText(text, maxLength) {

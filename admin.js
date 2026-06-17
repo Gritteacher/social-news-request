@@ -13,7 +13,8 @@ const ALLOWED_COMPLETED_TYPES = new Set([
 const state = {
   token: sessionStorage.getItem("dsn_pr_admin_token") || "",
   items: [],
-  selectedId: ""
+  selectedId: "",
+  loadingCount: 0
 };
 
 const elements = {};
@@ -68,6 +69,9 @@ function cacheElements() {
   elements.completedFile = document.getElementById("completedFile");
   elements.uploadCompleted = document.getElementById("uploadCompleted");
   elements.deleteNews = document.getElementById("deleteNews");
+  elements.globalLoading = document.getElementById("globalLoading");
+  elements.stepQueue = document.getElementById("stepQueue");
+  elements.stepDetail = document.getElementById("stepDetail");
 }
 
 function bindEvents() {
@@ -102,6 +106,7 @@ async function handleLogin(event) {
   }
 
   setButtonBusy(elements.loginButton, true, "กำลังเข้าสู่ระบบ...");
+  showGlobalLoading();
   hideNotice(elements.loginAlert);
 
   try {
@@ -120,6 +125,7 @@ async function handleLogin(event) {
     showNotice(elements.loginAlert, "รหัสผ่านไม่ถูกต้อง หรือเชื่อมต่อ Apps Script ไม่สำเร็จ", "error");
   } finally {
     setButtonBusy(elements.loginButton, false, "เข้าสู่ระบบ");
+    hideGlobalLoading();
   }
 }
 
@@ -140,6 +146,7 @@ function showLoginView() {
   elements.loginView.hidden = false;
   elements.adminView.hidden = true;
   renderEmptyDetail();
+  updateAdminSteps(false);
 }
 
 async function loadAllNews() {
@@ -149,6 +156,7 @@ async function loadAllNews() {
   }
 
   elements.newsList.replaceChildren(renderLoadingState("กำลังโหลดรายการข่าว..."));
+  showGlobalLoading();
   hideNotice(elements.adminAlert);
 
   try {
@@ -179,6 +187,8 @@ async function loadAllNews() {
     console.error(error);
     elements.newsList.replaceChildren(renderEmptyState("ยังโหลดรายการข่าวไม่ได้"));
     showNotice(elements.adminAlert, "ไม่สามารถโหลดรายการข่าวได้ กรุณาตรวจสอบ Apps Script Web App URL", "error");
+  } finally {
+    hideGlobalLoading();
   }
 }
 
@@ -235,6 +245,7 @@ function selectNews(id) {
   state.selectedId = id;
   renderNewsList();
   renderDetail(getSelectedItem());
+  updateAdminSteps(true);
 }
 
 function getSelectedItem() {
@@ -247,6 +258,7 @@ function renderDetail(item) {
     return;
   }
 
+  updateAdminSteps(true);
   elements.emptyDetail.hidden = true;
   elements.detailContent.hidden = false;
 
@@ -282,6 +294,7 @@ function renderDetail(item) {
 function renderEmptyDetail() {
   elements.emptyDetail.hidden = false;
   elements.detailContent.hidden = true;
+  updateAdminSteps(false);
   if (window.lucide) {
     window.lucide.createIcons();
   }
@@ -336,6 +349,7 @@ async function handleSaveDetail(event) {
 
   const mutationId = createId("mutation");
   setButtonBusy(elements.saveDetail, true, "กำลังบันทึก...");
+  showGlobalLoading();
   hideNotice(elements.adminAlert);
 
   try {
@@ -365,6 +379,7 @@ async function handleSaveDetail(event) {
     showNotice(elements.adminAlert, "ส่งคำสั่งบันทึกแล้ว แต่ยังยืนยันผลไม่สำเร็จ กรุณารีเฟรชเพื่อตรวจสอบ", "warning");
   } finally {
     setButtonBusy(elements.saveDetail, false, "บันทึกการแก้ไข");
+    hideGlobalLoading();
   }
 }
 
@@ -388,6 +403,7 @@ async function handleUploadCompleted() {
 
   const mutationId = createId("mutation");
   setButtonBusy(elements.uploadCompleted, true, "กำลังอัปโหลด...");
+  showGlobalLoading();
   hideNotice(elements.adminAlert);
 
   try {
@@ -416,6 +432,7 @@ async function handleUploadCompleted() {
     showNotice(elements.adminAlert, "ส่งไฟล์แล้ว แต่ยังยืนยันผลไม่สำเร็จ กรุณารีเฟรชเพื่อตรวจสอบ", "warning");
   } finally {
     setButtonBusy(elements.uploadCompleted, false, "อัปโหลดแผ่นข่าว");
+    hideGlobalLoading();
   }
 }
 
@@ -432,6 +449,7 @@ async function handleDeleteNews() {
 
   const mutationId = createId("mutation");
   setButtonBusy(elements.deleteNews, true, "กำลังลบ...");
+  showGlobalLoading();
   hideNotice(elements.adminAlert);
 
   try {
@@ -455,6 +473,7 @@ async function handleDeleteNews() {
     showNotice(elements.adminAlert, "ส่งคำสั่งลบแล้ว แต่ยังยืนยันผลไม่สำเร็จ กรุณารีเฟรชเพื่อตรวจสอบ", "warning");
   } finally {
     setButtonBusy(elements.deleteNews, false, "ลบข่าว");
+    hideGlobalLoading();
   }
 }
 
@@ -601,6 +620,29 @@ function showNotice(target, message, type = "success") {
 function hideNotice(target) {
   target.hidden = true;
   target.textContent = "";
+}
+
+function showGlobalLoading() {
+  state.loadingCount += 1;
+  if (elements.globalLoading) {
+    elements.globalLoading.classList.add("is-active");
+  }
+}
+
+function hideGlobalLoading() {
+  state.loadingCount = Math.max(0, state.loadingCount - 1);
+  if (state.loadingCount === 0 && elements.globalLoading) {
+    elements.globalLoading.classList.remove("is-active");
+  }
+}
+
+function updateAdminSteps(hasSelection) {
+  if (!elements.stepQueue || !elements.stepDetail) {
+    return;
+  }
+
+  elements.stepQueue.classList.add("active");
+  elements.stepDetail.classList.toggle("active", Boolean(hasSelection));
 }
 
 function setButtonBusy(button, isBusy, label) {
