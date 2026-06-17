@@ -1,5 +1,5 @@
 // TODO: ใส่ URL ของ Google Apps Script Web App หลัง deploy แล้ว
-const GOOGLE_SCRIPT_URL = "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzV_RkQ8-CXRrfnnu-dyt01LOtuqryB87CHHHMa3NOqQv3W4iH9eM0LcponI89G6Nc/exec";
 
 const MAX_IMAGES = 10;
 const VERIFY_TIMEOUT_MS = 25000;
