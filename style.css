@@ -653,7 +653,12 @@ select:focus {
 }
 
 .section-toolbar {
+  align-items: center;
   margin-bottom: 18px;
+}
+
+.section-toolbar > div {
+  min-width: 0;
 }
 
 .completed-grid {
@@ -749,11 +754,12 @@ select:focus {
 .footer-inner {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 14px;
-  min-height: 68px;
+  min-height: 56px;
   color: var(--muted);
-  font-size: 0.94rem;
+  font-size: 0.92rem;
+  line-height: 1.45;
 }
 
 .admin-main {
@@ -1369,8 +1375,9 @@ textarea {
   .status-section .section-toolbar,
   .completed-section .section-toolbar {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
+    gap: 12px;
   }
 
   .status-section .section-toolbar h2,
@@ -1434,11 +1441,34 @@ textarea {
   }
 
   .footer-inner {
-    display: grid;
+    display: flex;
     justify-items: center;
     min-height: auto;
-    padding-block: 18px;
+    padding-block: 12px;
     text-align: center;
+  }
+}
+
+@media (max-width: 520px) {
+  .status-section .section-toolbar h2,
+  .completed-section .section-toolbar h2 {
+    font-size: 1.14rem;
+  }
+
+  .status-section .section-toolbar,
+  .completed-section .section-toolbar {
+    margin-bottom: 14px;
+  }
+
+  .status-section .icon-button,
+  .completed-section .icon-button {
+    width: 40px;
+    height: 40px;
+    flex-basis: 40px;
+  }
+
+  .footer-inner {
+    font-size: 0.86rem;
   }
 }
 
