@@ -256,7 +256,7 @@ function handleSubmitNews_(payload) {
   const id = createNewsId_();
   const now = nowIso_();
   const rootFolder = DriveApp.getFolderById(requiredConfig_("ROOT_FOLDER_ID"));
-  const folder = rootFolder.createFolder(id + " - " + sanitizeDriveName_(title));
+  const folder = rootFolder.createFolder(newsFolderName_(title, id));
 
   let imageCount = 0;
   images.forEach(function(file, index) {
@@ -785,7 +785,7 @@ function getOrCreateNewsFolder_(item) {
   }
 
   const rootFolder = DriveApp.getFolderById(requiredConfig_("ROOT_FOLDER_ID"));
-  return rootFolder.createFolder(item.id + " - " + sanitizeDriveName_(item.title || "news"));
+  return rootFolder.createFolder(newsFolderName_(item.title || "news", item.id));
 }
 
 function renameNewsFolder_(folderId, id, title) {
@@ -794,10 +794,16 @@ function renameNewsFolder_(folderId, id, title) {
   }
 
   try {
-    DriveApp.getFolderById(folderId).setName(id + " - " + sanitizeDriveName_(title));
+    DriveApp.getFolderById(folderId).setName(newsFolderName_(title, id));
   } catch (error) {
     Logger.log("Cannot rename folder: " + error);
   }
+}
+
+function newsFolderName_(title, id) {
+  const titlePart = sanitizeDriveName_(title || "news");
+  const idPart = sanitizeDriveName_(id || "");
+  return idPart ? titlePart + " - " + idPart : titlePart;
 }
 
 function trashOldCompletedFile_(fileId) {
